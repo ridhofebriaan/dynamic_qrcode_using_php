@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic QR Code</title>
+</head>
+<body>
+    <h1>Dynamic QR Code</h1>
+    <div id="qr-container">
+        <img id="qr-code" src="" alt="QR Code">
+    </div>
+    <p id="qr-data">QR Code data: <span id="data-text"></span></p>
+
+    <script>
+        function updateQRCode() {
+            // Fetch the QR code and data from the server
+            fetch('generate_qr.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the QR code image source
+                    document.getElementById('qr-code').src = data.url + '?t=' + new Date().getTime();
+                    // Update the data display
+                    document.getElementById('data-text').textContent = data.data;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Initial load of QR code
+        updateQRCode();
+
+        // Update QR code every 5 seconds
+        setInterval(updateQRCode, 5000);
+    </script>
+</body>
+</html>
